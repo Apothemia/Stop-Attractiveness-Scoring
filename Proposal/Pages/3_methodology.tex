@@ -1,0 +1,63 @@
+\title{Methodology}
+
+
+\section{Methodology}
+\label{sec:methodology}
+
+\subsection{Data Source}
+\label{subsec:data-source}
+
+The dataset provided by Luo et al.~\cite{luo2025flow} consists of smart card records covering the Haidian District of Beijing, ranges between the dates 07/03/2016--13/03/2016, includes 45 bus lines with 128 bus stations and 4 metro lines with 13 metro stations.
+Some of the important fields of these records are the following:
+
+\begin{table}[htbp]
+    \small
+    \hspace*{-1cm}
+    \begin{tabular}{ c | c c c }
+        \hline
+        \textbf{Type} & \textbf{Variable} & \textbf{Description}       & \textbf{Value}                             \\
+        \hline
+        Metrosystem   & GRANT\_ID         & Grant card ID              & 10000 -- 99999999                          \\
+        ~             & ENTRY\_TIME       & Entry station time         & 2016/03/07~00:00:00 -- 2016/03/13~23:59:59 \\
+        ~             & DEAL\_TIME        & Deal time                  & 2016/03/07~00:00:00 -- 2016/03/13~23:59:59 \\
+        ~             & LINE\_CODE        & Line code                  & 4, 6, 9, 10                                \\
+        ~             & ENTRY\_NUM        & Entry station number       & 1 -- 13                                    \\
+        ~             & EXIT\_NUM         & Exit station number        & 1 -- 13                                    \\
+        ~             & ENTRY\_STATION    & Entry station name         & --                                         \\
+        ~             & EXIT\_STATION     & Exit station name          & --                                         \\
+        \hline
+        Bus system    & BUSDATA\_ID       & Bus card ID                & 18… (11 digits total)                      \\
+        ~             & DEAL\_TIME        & Deal time                  & 2016/03/07~00:00:00 -- 2016/03/13~23:59:59 \\
+        ~             & UP\_TIME          & Update time                & 2016/03/07~00:00:00 -- 2016/03/13~23:59:59 \\
+        ~             & LINE\_CODE        & Line code                  & 114, 121, … (45 lines total)               \\
+        ~             & VEHICLE\_CODE     & Vehicle code               & --                                         \\
+        ~             & ON\_STATION       & Getting on station number  & 1 -- 128                                   \\
+        ~             & OFF\_STATION      & Getting off station number & 1 -- 128                                   \\
+    \end{tabular}\label{tab:table}
+\end{table}
+
+\subsection{Data Preprocessing}
+\label{subsec:data-preprocessing}
+
+\begin{itemize}[noitemsep]
+    \item \textbf{Filtering and Cleaning}: Remove records with missing or inconsistent data.
+    \item \textbf{Multi-line Transfer Trips}: Identify sequential trips with the same-card to detect transfer behaviour between the lines.
+    \item \textbf{Day-Level Aggregation}: Combine multiple bus and metro lines to find daily routines.
+    \item \textbf{Stop-Level Aggregation}: Calculate the total number of boardings, unique passengers, and lines passing per stop.
+\end{itemize}
+
+\subsection{Bus Stop Attractiveness Scoring (BSAS) Framework}
+\label{subsec:bsas-framework}
+
+
+The \textbf{Attractiveness Score (AS)} for each bus stop \(S_i\) is computed as a weighted aggregation of three key metrics derived from the Smart Card Data according to the methodology mentioned above:
+
+\(AS_i = w_1 \cdot N_{boardings_i} + w_2 \cdot LineDiversity_i + w_3 \cdot TransferFrequency_i\)
+
+Where:
+\begin{itemize}[noitemsep]
+    \item \(N_{boardings}\): Number of boardings at \(S_i\)
+    \item \(LineDiversity\): Number of unique bus lines serving at \(S_i\)
+    \item \(TransferFrequency\): Frequency of transfers occurring at \(S_i\)
+    \item \(w_1,w_2,w_3\): Weight coefficients to be calculated
+\end{itemize}
