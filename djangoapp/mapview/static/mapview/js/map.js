@@ -1,23 +1,4 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>BART Stations</title>
-    <link
-            rel="stylesheet"
-            href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-    />
-    <style>
-        #map {
-            height: 100vh;
-        }
-    </style>
-</head>
-<body>
-
-<div id="map"></div>
-
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-<script>
+document.addEventListener('DOMContentLoaded', () => {
     const map = L.map("map").setView([37.77, -122.42], 10);
 
     L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
@@ -32,8 +13,6 @@
                     .addTo(map)
                     .bindPopup(`<b>${s.name}</b><br>${s.code}`);
             });
-        });
-</script>
-
-</body>
-</html>
+        })
+        .catch(error => console.error('Error loading stations:', error));
+});

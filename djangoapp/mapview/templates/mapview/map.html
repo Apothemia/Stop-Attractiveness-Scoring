@@ -1,0 +1,77 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>BART Stations</title>
+    <link
+            rel="stylesheet"
+            href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    />
+    <link rel="stylesheet" type="text/css" href="{% static 'mapview/css/style.css' %}">
+</head>
+<body>
+
+<div id="map"></div>
+
+<div id="side-panel">
+    <div class="panel-section" id="data-selection">
+        <div class="panel-title">Data Selection</div>
+        <div class="form-group">
+            <label for="model-select">Data Model</label>
+            <select id="model-select" disabled>
+                <option value="YearlyUsage" selected>YearlyUsage</option>
+            </select>
+        </div>
+
+        <div class="panel-title">Date Range</div>
+        <div class="form-group">
+            <label for="start-date">Start Date</label>
+            <input type="date" id="start-date"/>
+        </div>
+
+        <div class="form-group">
+            <label for="end-date">End Date</label>
+            <input type="date" id="end-date"/>
+            <div class="date-range-hint">Maximum 7 days</div>
+        </div>
+
+        <div class="error-message" id="error-message"></div>
+
+        <button id="load-button">Load Data</button>
+        <div class="loading" id="loading">
+            <div class="spinner"></div>
+            <div style="margin-top: 10px; font-size: 13px;">Loading...</div>
+        </div>
+    </div>
+
+    <div class="panel-section" id="data-preview-container">
+        <div class="preview-header" id="preview-header">
+            <span class="preview-title">Data Preview</span>
+            <span class="preview-toggle">▼</span>
+        </div>
+        <div class="preview-content" id="preview-content">
+            <table id="data-table">
+                <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Hour</th>
+                    <th>Source</th>
+                    <th>Dest</th>
+                    <th>Passengers</th>
+                </tr>
+                </thead>
+                <tbody id="table-body">
+                </tbody>
+            </table>
+            <div class="record-count" id="record-count"></div>
+            <div id="pagination"></div>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="{% static 'mapview/js/map.js' %}"></script>
+    <script src="{% static 'mapview/js/data-selector.js' %}"></script>
+
+</body>
+</html>

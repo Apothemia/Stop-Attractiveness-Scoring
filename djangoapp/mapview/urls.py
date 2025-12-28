@@ -1,7 +1,8 @@
 from django.urls import path
-from .views import station_geojson, map_view
+from . import views
 
 urlpatterns = [
-    path('', map_view, name='map'),
-    path('api/stations/', station_geojson, name='station_geojson'),
+    path('', views.map_view, name='map_view'),
+    path('api/stations/', views.station_geojson, name='station_geojson'),
+    path('api/data/', views.fetch_data, name='fetch_data'),
 ]
