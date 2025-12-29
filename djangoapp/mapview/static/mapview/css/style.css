@@ -344,3 +344,114 @@ button:disabled {
     color: #666;
     font-weight: bold;
 }
+
+#attractiveness-panel .weights-labels {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    font-size: 12px;
+    margin-bottom: 8px;
+}
+
+.weights-bar {
+    position: relative;
+    width: 100%;
+    height: 16px;
+    border-radius: 10px;
+    overflow: hidden;
+    background: #2b2f36;
+    user-select: none;
+    touch-action: none;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.weights-seg {
+    position: absolute;
+    top: 0;
+    height: 100%;
+}
+
+.weights-seg.seg-1 {
+    background: #3b82f6;
+}
+
+.weights-seg.seg-2 {
+    background: #10b981;
+}
+
+.weights-seg.seg-3 {
+    background: #f59e0b;
+}
+
+.weights-handle {
+    position: absolute;
+    top: -4px;
+    width: 12px;
+    height: 24px;
+    border-radius: 6px;
+    background: #e5e7eb;
+    border: 1px solid rgba(0, 0, 0, 0.25);
+    transform: translateX(-50%);
+    cursor: ew-resize;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+}
+
+.scores-status {
+    margin-top: 8px;
+    font-size: 12px;
+    opacity: 0.9;
+}
+
+.scores-output {
+    margin-top: 8px;
+    font-size: 12px;
+    max-height: 220px;
+    overflow: auto;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 8px;
+    padding: 8px;
+    background: rgba(0, 0, 0, 0.15);
+}
+
+.scores-output table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.scores-output th,
+.scores-output td {
+    text-align: left;
+    padding: 6px 6px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.10);
+}
+
+.scores-output th {
+    position: sticky;
+    top: 0;
+    background: rgba(0, 0, 0, 0.25);
+}
+
+.heatmap-controls {
+    margin-top: 10px;
+    display: grid;
+    gap: 6px;
+}
+
+#heatmap-metric {
+    width: 100%;
+    padding: 8px 10px;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    background: rgba(0, 0, 0, 0.18);
+    color: inherit;
+    outline: none;
+}
+
+#heatmap-metric:focus {
+    border-color: rgba(255, 255, 255, 0.26);
+}
+
+.heatmap-hint {
+    font-size: 12px;
+    opacity: 0.85;
+}

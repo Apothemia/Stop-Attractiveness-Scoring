@@ -74,9 +74,55 @@
         </div>
     </div>
 
+    <div class="panel-section" id="attractiveness-panel" >
+        <div class="section-title">Attractiveness Score</div>
+
+        <div class="weights-row">
+            <div class="weights-labels">
+                <span>Boardings (w1): <span id="w1-label">0.33</span></span>
+                <span>EffDst (w2): <span id="w2-label">0.33</span></span>
+                <span>Access (w3): <span id="w3-label">0.34</span></span>
+            </div>
+
+            <div id="weights-bar" class="weights-bar" aria-label="Weights bar">
+                <div id="weights-seg-1" class="weights-seg seg-1"></div>
+                <div id="weights-seg-2" class="weights-seg seg-2"></div>
+                <div id="weights-seg-3" class="weights-seg seg-3"></div>
+
+                <div id="weights-handle-1" class="weights-handle" role="slider" tabindex="0"
+                     aria-label="Splitter 1"></div>
+                <div id="weights-handle-2" class="weights-handle" role="slider" tabindex="0"
+                     aria-label="Splitter 2"></div>
+            </div>
+
+            <input id="w1-input" type="hidden" value="0.33"/>
+            <input id="w2-input" type="hidden" value="0.33"/>
+            <input id="w3-input" type="hidden" value="0.34"/>
+        </div>
+
+        <button id="compute-scores-button" class="btn-primary">Compute scores</button>
+
+        <div class="heatmap-controls">
+            <label class="panel-title" for="heatmap-metric">Heatmap metric</label>
+            <select id="heatmap-metric">
+                <option value="none" selected>None</option>
+                <option value="board">Boardings</option>
+                <option value="eff_dst">Effective destination diversity</option>
+                <option value="access">Access</option>
+                <option value="as">Attractiveness score (AS)</option>
+            </select>
+            <div class="heatmap-hint">Low = yellow, high = red</div>
+        </div>
+
+        <div id="scores-status" class="scores-status"></div>
+        <div id="scores-output" class="scores-output"></div>
+    </div>
+
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script src="{% static 'mapview/js/map.js' %}"></script>
     <script src="{% static 'mapview/js/data-selector.js' %}"></script>
+    <script src="{% static 'mapview/js/attractiveness.js' %}"></script>
+    <script src="{% static 'mapview/js/heatmap.js' %}"></script>
 
 </div>
 </body>
