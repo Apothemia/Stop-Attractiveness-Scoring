@@ -10,15 +10,21 @@ class DataSelector {
         this.loading = document.getElementById('loading');
         this.recordCount = document.getElementById('record-count');
         this.paginationContainer = document.getElementById('pagination');
+
+        this.selectionHeader = document.getElementById('selection-header');
+        this.selectionContent = document.getElementById('selection-content');
+        this.selectionToggle = this.selectionHeader.querySelector('.section-toggle');
+
         this.previewHeader = document.getElementById('preview-header');
         this.previewContent = document.getElementById('preview-content');
-        this.previewToggle = document.querySelector('.preview-toggle');
+        this.previewToggle = this.previewHeader.querySelector('.section-toggle');
 
         this.allData = [];
         this.currentPage = 1;
         this.rowsPerPage = 10;
         this.totalPages = 0;
-        this.isPreviewExpanded = true;
+        this.isSelectionExpanded = false;
+        this.isPreviewExpanded = false;
 
         this.initializeDefaults();
         this.attachEventListeners();
@@ -34,6 +40,7 @@ class DataSelector {
         this.loadButton.addEventListener('click', () => this.handleLoadData());
         this.startDateInput.addEventListener('change', () => this.clearErrorOnChange());
         this.endDateInput.addEventListener('change', () => this.clearErrorOnChange());
+        this.selectionHeader.addEventListener('click', () => this.toggleSelection());
         this.previewHeader.addEventListener('click', () => this.togglePreview());
     }
 
@@ -209,6 +216,18 @@ class DataSelector {
         this.currentPage = pageNumber;
         this.displayCurrentPage();
         this.scrollToTop();
+    }
+
+    toggleSelection() {
+        this.isSelectionExpanded = !this.isSelectionExpanded;
+        
+        if (this.isSelectionExpanded) {
+            this.selectionContent.classList.add('expanded');
+            this.selectionToggle.textContent = '▼';
+        } else {
+            this.selectionContent.classList.remove('expanded');
+            this.selectionToggle.textContent = '▶';
+        }
     }
 
     togglePreview() {

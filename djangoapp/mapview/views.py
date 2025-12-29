@@ -3,28 +3,24 @@ from django.http import JsonResponse
 from django.views.decorators.http import require_http_methods
 from datetime import datetime, timedelta
 from .models import Stations, YearlyUsage
-from .utils import calculate_station_scores
+
+
+def map_view(request):
+    return render(request, 'map.html')
 
 
 def station_geojson(request):
-    scores = calculate_station_scores()
-
     data = [
         {
             'code': s.code,
             'name': s.name,
             'abbr': s.abbreviation,
             'lat': s.latitude,
-            'lon': s.longitude,
-            'score': scores.get(s.abbreviation, 0),
+            'lon': s.longitude
         }
         for s in Stations.objects.all()
     ]
     return JsonResponse(data, safe=False)
-
-
-def map_view(request):
-    return render(request, 'map.html')
 
 
 @require_http_methods(["GET"])

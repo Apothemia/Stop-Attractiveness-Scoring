@@ -15,42 +15,47 @@
 <div id="map"></div>
 
 <div id="side-panel">
-    <div class="panel-section" id="data-selection">
-        <div class="panel-title">Data Selection</div>
-        <div class="form-group">
-            <label for="model-select">Data Model</label>
-            <select id="model-select" disabled>
-                <option value="YearlyUsage" selected>YearlyUsage</option>
-            </select>
+    <div class="panel-section" id="data-selection-container">
+        <div class="section-header" id="selection-header">
+            <span class="section-title">Data Selection</span>
+            <span class="section-toggle">▶</span>
         </div>
+        <div class="section-content" id="selection-content">
+            <div class="form-group">
+                <label class="panel-title" for="model-select">Data Model</label>
+                <select id="model-select" disabled>
+                    <option value="YearlyUsage" selected>YearlyUsage</option>
+                </select>
+            </div>
 
-        <div class="panel-title">Date Range</div>
-        <div class="form-group">
-            <label for="start-date">Start Date</label>
-            <input type="date" id="start-date"/>
-        </div>
+            <div class="panel-title">Date Range</div>
+            <div class="form-group">
+                <label for="start-date">Start Date</label>
+                <input type="date" id="start-date"/>
+            </div>
 
-        <div class="form-group">
-            <label for="end-date">End Date</label>
-            <input type="date" id="end-date"/>
-            <div class="date-range-hint">Maximum 7 days</div>
-        </div>
+            <div class="form-group">
+                <label for="end-date">End Date</label>
+                <input type="date" id="end-date"/>
+                <div class="date-range-hint">Maximum 7 days</div>
+            </div>
 
-        <div class="error-message" id="error-message"></div>
+            <div class="error-message" id="error-message"></div>
 
-        <button id="load-button">Load Data</button>
-        <div class="loading" id="loading">
-            <div class="spinner"></div>
-            <div style="margin-top: 10px; font-size: 13px;">Loading...</div>
+            <button id="load-button">Load Data</button>
+            <div class="loading" id="loading">
+                <div class="spinner"></div>
+                <div style="margin-top: 10px; font-size: 13px;">Loading...</div>
+            </div>
         </div>
     </div>
 
     <div class="panel-section" id="data-preview-container">
-        <div class="preview-header" id="preview-header">
-            <span class="preview-title">Data Preview</span>
-            <span class="preview-toggle">▼</span>
+        <div class="section-header" id="preview-header">
+            <span class="section-title">Data Preview</span>
+            <span class="section-toggle">▶</span>
         </div>
-        <div class="preview-content" id="preview-content">
+        <div class="section-content" id="preview-content">
             <table id="data-table">
                 <thead>
                 <tr>
@@ -73,5 +78,6 @@
     <script src="{% static 'mapview/js/map.js' %}"></script>
     <script src="{% static 'mapview/js/data-selector.js' %}"></script>
 
+</div>
 </body>
 </html>
