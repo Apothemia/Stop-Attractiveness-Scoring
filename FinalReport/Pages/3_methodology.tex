@@ -1,0 +1,66 @@
+\title{Methodology}
+
+
+\section{Methodology}
+\label{sec:methodology}
+
+\subsection{Data Source}
+\label{subsec:data-source}
+
+This study uses the hourly ridership origin--destination (OD) records from the Bay Area Rapid Transit (BART) system in California, United States~\cite{bart}\@.
+Each record represents the number of passengers travelling from a \textit{source} station to a \textit{destination} station within a specific hour.
+The dataset is provided in a comma-separated values (CSV) format with the following fields:
+
+\begin{table}[htbp]
+    \small
+    \hspace*{1 cm}
+    \begin{tabular}{ c | c c c }
+        \hline
+        \textbf{Variable} & \textbf{Description}                          & \textbf{Value}             \\
+        \hline
+        date              & service date (YYYY-MM-DD)                     & 2025-01-01 -- 2025-12-28   \\
+        hour              & hour of day                                   & 0 -- 23                    \\
+        source            & 4-letter abbreviation for origin station      & ``12TH'', ``16TH'', \ldots \\
+        destination       & 4-letter abbreviation for destination station & ``12TH'', ``16TH'', \ldots \\
+        passengers        & number of passengers travelled                & 0 -- \ldots                \\
+    \end{tabular}\label{tab:table}
+\end{table}
+
+\subsection{Data Preparation}
+\label{subsec:data-preparation}
+
+The data preparation methodology consists of three principal stages that transform the raw origin–destination (OD) records into an analysable format.
+
+\begin{itemize}
+    \item \textbf{Filtering and Cleaning}: The dataset is first cleaned by removing invalid entries, such as records where the source and destination stations are identical.
+
+    \item \textbf{Station-Level Aggregation}: Records are grouped by source station to compute station-level indicators, including total boardings and destination diversity.
+
+    \item \textbf{Day-Level Aggregation}: The station-level indicators are aggregated by date to facilitate day-level and time-series analyses.
+\end{itemize}
+
+\subsection{Attractiveness Scoring Framework}
+\label{subsec:as-framework}
+
+For each station \(S_i\), the \textbf{Attractiveness Score (AS)} is computed as a weighted aggregation of {2} metrics derived from the aggregated records:
+
+\[ AS_i = w_1 \cdot Boardings_i + w_2 \cdot LineDiversity_i \]
+
+Where:
+\begin{itemize}[noitemsep]
+    \item \(Boardings_i\): number of boardings at the station \(S_i\), normalised to [0,1] range:
+    \begin{gather*}
+        Boardings_i = \frac{B_i - \min(B)}{\max(B) - \min(B)}\quad
+        \textrm{where  } B_i = \sum_{\text{source}=S_i} passengers
+    \end{gather*}
+
+    \item \(LineDiversity_i\): diversity of travel options from station \(S_i\), normalised to [0,1] range:
+    \begin{gather*}
+        LineDiversity_i = \frac{Ld_i - \min(Ld)}{\max(Ld) - \min(Ld)}\quad
+        \textrm{where  } Ld_i = |\{\; destination \;:\; (source=S_i) \;\}|
+    \end{gather*}
+
+    \item \(w_1,w_2\): weight coefficients to be adjusted.
+\end{itemize}
+
+\textbf{Note:} \texttt{TransferFrequency} is not considered in this setting because the OD-hour aggregated format does not provide enough information to reliably identify individual transfer events or sequential legs of a single passenger journey.
