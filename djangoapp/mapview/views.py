@@ -114,7 +114,7 @@ def station_scores(request):
     if s <= 0:
         return JsonResponse({'error': 'At least one weight must be > 0'}, status=400)
 
-    # Normalize server-side to guarantee sum=1 even if client rounding is off
+    # Normalize server-side to guarantee sum=1
     w1, w2, w3 = (w1 / s, w2 / s, w3 / s)
 
     records = YearlyUsage.objects.filter(

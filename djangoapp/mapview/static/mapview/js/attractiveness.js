@@ -60,7 +60,6 @@ class WeightSplitterBar {
         window.addEventListener('pointerup', onPointerUp);
         window.addEventListener('pointermove', onPointerMove);
 
-        // Click-to-move nearest handle
         this.bar.addEventListener('pointerdown', (e) => {
             if (e.target === this.h1 || e.target === this.h2) return;
             const rect = this.bar.getBoundingClientRect();

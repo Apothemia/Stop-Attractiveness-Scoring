@@ -1,8 +1,6 @@
 import pandas as pd
 from pathlib import Path
 
-from decorator import append
-
 INPUT_DIR = Path('daily_partitions')
 OUTPUT_DIR = Path('daily_partitions_parquet')
 
@@ -56,19 +54,3 @@ for csv_path in sorted(INPUT_DIR.glob('*.csv')):
         compression='snappy',
         index=False
     )
-
-    # chunks = pd.read_csv(
-    #     csv_path,
-    #     chunksize=CHUNK_SIZE
-    # )
-    #
-    # first = True
-    # for chunk in chunks:
-    #     chunk.to_parquet(
-    #         parquet_path,
-    #         engine='pyarrow',
-    #         compression=COMPRESSION,
-    #         index=False,
-    #         append=True
-    #     )
-    #     first = False

@@ -90,7 +90,7 @@ def station_attractiveness_scores_from_filtered_records(
         inbound_by_dst[dst] += p
         flow_by_src_dst[src][dst] += p
 
-    # Data validation (scope limited to UI-filtered records AND stations we can locate by abbreviation)
+    # Data validation
     stations_in_scope = {
         abbr for abbr in set(boardings_by_src) | set(inbound_by_dst) | set(flow_by_src_dst)
         if abbr in stations_latlon_by_abbr
@@ -98,7 +98,7 @@ def station_attractiveness_scores_from_filtered_records(
     if not stations_in_scope:
         return {}
 
-    # EffDst
+    # EffDst score
     raw_effdst_by_src: dict[str, float] = {}
     for src in stations_in_scope:
         flows = flow_by_src_dst.get(src, {})
@@ -115,7 +115,7 @@ def station_attractiveness_scores_from_filtered_records(
                 H -= pij * math.log(pij)
         raw_effdst_by_src[src] = math.exp(H)
 
-    # Access
+    # Access score
     raw_access_by_src: dict[str, float] = {}
     for src in stations_in_scope:
         src_latlon = stations_latlon_by_abbr.get(src)
@@ -139,7 +139,7 @@ def station_attractiveness_scores_from_filtered_records(
 
         raw_access_by_src[src] = acc
 
-    # Min-Max normalisation to [0,1] (within filtered scope)
+    # Min-Max normalisation to [0,1]
     raw_boardings_by_src = {k: float(v) for k, v in boardings_by_src.items() if k in stations_in_scope}
     board_norm = _minmax_norm(raw_boardings_by_src)
     effdst_norm = _minmax_norm({k: raw_effdst_by_src[k] for k in stations_in_scope})
