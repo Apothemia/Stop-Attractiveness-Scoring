@@ -1,6 +1,6 @@
 \title{Report}
 
-\documentclass[10pt, a4paper]{IEEEtran}
+\documentclass[conference]{IEEEtran}
 \usepackage{fancyhdr,amsmath,amssymb}
 \usepackage{graphicx}
 \usepackage{setspace}
@@ -12,6 +12,10 @@
 \usepackage[backend=biber,style=ieee,sorting=ynt]{biblatex}
 \addbibresource{references.bib}
 
+\newcommand{\zwsp}{\hspace{0pt}}
+\setlength{\parskip}{3pt}
+
+
 \begin{document}
 
     \input{Pages/0_cover}
@@ -21,7 +25,11 @@
     \input{Pages/2_literature_survey}
 
     \input{Pages/3_methodology}
-    
+
+    \input{Pages/discussion}
+
+    \input{Pages/conclusion}
+
     \input{Pages/4_references}
 
 \end{document}

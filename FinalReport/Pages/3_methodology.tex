@@ -8,7 +8,7 @@ This study uses the hourly ridership origin--destination (OD) records from the B
 Each record represents the number of passengers travelling from a \textit{source} station to a \textit{destination} station within a specific hour.
 The dataset is provided in a comma-separated values (CSV) format with the following fields:
 
-\vspace{0.25 cm} \hspace{-0.5 cm}
+\vspace{0.25 cm}
 \begin{tabular}{ c c c c }
     \hline
     \textbf{Variable} & \textbf{Description} & \textbf{Value}    \\
@@ -19,13 +19,12 @@ The dataset is provided in a comma-separated values (CSV) format with the follow
     destination       & destination station  & 4-letter code     \\
     passengers        & number of passengers & integer \ldots    \\
 \end{tabular}\label{tab:table}
-
 \vspace{0.5 cm}
 
-The station reference table reports the selected attributes used to represent each transit station in the analysis.
+The station reference table reports the selected attributes used to represent each \textit{stop} in the analysis.
 It includes a unique station identifier, descriptive naming fields, and geographic coordinates, which together support consistent station matching across datasets and enable spatial computations.
 
-\vspace{0.25 cm} \hspace{-0.5 cm}
+\vspace{0.25 cm}
 \begin{tabular}{ c c c c }
     \hline
     \textbf{Variable} & \textbf{Description}  & \textbf{Value}  \\
@@ -43,61 +42,92 @@ It includes a unique station identifier, descriptive naming fields, and geograph
 The data preparation methodology consists of three principal stages that transform the raw origin–destination (OD) records into an analysable format.
 
 \begin{itemize}
-    \item \textbf{Filtering and Cleaning}: The dataset is first cleaned by removing invalid entries, such as records where the source and destination stations are identical.
-
-    \item \textbf{Station-Level Aggregation}: Records are grouped by source station to compute station-level indicators, including total boardings and destination-choice dispersion (effective destination diversity).
-
-    \item \textbf{Day-Level Aggregation}: The station-level indicators are aggregated by date to facilitate day-level and time-series analyses.
+    \item \textbf{Filtering and Cleaning}: The dataset is first cleaned by removing invalid entries, such as records where the source and destination stops are identical.
+    \item \textbf{Stop-Level Aggregation}: Records are grouped by source stop to compute stop-level indicators, including total boardings and destination-choice dispersion (effective destination diversity).
+    \item \textbf{Day-Level Aggregation}: The stop-level indicators are aggregated by date to facilitate day-level and time-series analyses.
 \end{itemize}
 
 \subsection{Attractiveness Scoring Framework}
 \label{subsec:as-framework}
 
-For each station \(S_i\), the \textbf{Attractiveness Score (AS)} is computed as a weighted aggregation of \textbf{three} metrics derived from the aggregated OD records:
-\[ AS_i = w_1 \cdot Board_i + w_2 \cdot EffDst_i + w_3 \cdot Access_i \]
+For each stop \(S_i\), the \textbf{Attractiveness Score (AS)} is computed as a weighted aggregation of \textbf{three} metrics derived from the aggregated OD records:
+\[ AS_i = w_1 \cdot \textit{Board}_i + w_2 \cdot \textit{EffDst}_i + w_3 \cdot \textit{Access}_i \]
 
 Where:
-\begin{itemize}[noitemsep]
-    \item \(Board_i\): number of boardings at station \(S_i\), normalised to \([0,1]\):
-    \begin{gather*}
-        B_i = \sum_{\text{source}=S_i} passengers \\
-        Board_i = \frac{B_i - \min(B)}{\max(B) - \min(B)}
-    \end{gather*}
-
-    \item \(EffDst_i\): \textbf{effective destination diversity}, which shows how widely passengers distribute their destination choices (i.e.\ many meaningful options rather than a long tail of rarely used destinations).
-    First, define aggregated OD flow \(F_{ij} = \sum passengers\) for trips from \(S_i\) to \(S_j\), and the destination choice probability
-    \begin{gather*}
-        p_{ij}=\frac{F_{ij}}{\sum_{j} F_{ij}} \quad \textrm{for } \sum_{j}F_{ij}>0
-    \end{gather*}
-    Then compute Shannon entropy \(H_i\)~\cite{entropy} and its ``effective number of destinations'' (Hill number of order 1):
-    \begin{gather*}
-        H_i = -\sum_{j} p_{ij}\ln(p_{ij}), \qquad
-        D_i = \exp(H_i)
-    \end{gather*}
-    Finally normalise to \([0,1]\):
-    \begin{gather*}
-        EffDst_i = \frac{D_i - \min(D)}{\max(D) - \min(D)}
-    \end{gather*}
-
-    \item \(Access_i\): an \textbf{attraction-weighted option index} that values access to highly demanded destinations.
-    Let destination attractiveness be the inbound volume:
-    \begin{gather*}
-        A_j = \sum_{\text{destination}=S_j} passengers
-    \end{gather*}
-    Let \(dist_{ij}\) be the geographic distance between stations \(S_i\) and \(S_j\) (computed from station coordinates), and let the distance-decay function be:
-    \begin{gather*}
-        f(dist_{ij}) = \frac{1}{1 + dist_{ij}}
-    \end{gather*}
-
-    Then:
-    \begin{gather*}
-        Acc_i = \sum_{j \neq i} A_j \cdot f(dist_{ij}), \\
-        Access_i = \frac{Acc_i - \min(Acc)}{\max(Acc) - \min(Acc)}
-    \end{gather*}
-
-    \item \(w_1,w_2,w_3\): weight coefficients to be adjusted.
+\begin{itemize}
+    \item {
+        \textit{Board}\(_i\): Number of boardings at the stop \(S_i\), normalised to \([0,1]\):
+        \begin{gather*}
+            B_i = \sum_{\text{source}=S_i} passengers \\
+            Board_i = \frac{B_i - \min(B)}{\max(B) - \min(B)}
+        \end{gather*}
+    }
+    \item {
+        \textit{EffDst}\(_i\): The \textbf{effective destination diversity}, which shows how widely passengers distribute their destination choices (i.e.\ many meaningful options rather than rarely used destinations).
+        First, define aggregated OD flow \(F_{ij} = \sum passengers\) for trips from \(S_i\) to \(S_j\), and the destination choice probability
+        \begin{gather*}
+            p_{ij}=\frac{F_{ij}}{\sum_{j} F_{ij}} \quad \textrm{for } \sum_{j}F_{ij}>0
+        \end{gather*}
+        Then compute Shannon entropy \(H_i\)~\cite{entropy} and its ``effective number of destinations'' (Hill number of order 1):
+        \begin{gather*}
+            H_i = -\sum_{j} p_{ij}\ln(p_{ij}), \qquad
+            D_i = \exp(H_i)
+        \end{gather*}
+        Finally, normalise to \([0,1]\):
+        \begin{gather*}
+            \textit{EffDst}_i = \frac{D_i - \min(D)}{\max(D) - \min(D)}
+        \end{gather*}
+    }
+    \item {
+        \textit{Access}\(_i\): An \textbf{attraction-weighted option index} that values access to highly demanded destinations.
+        Let destination attractiveness be the inbound volume:
+        \begin{gather*}
+            A_j = \sum_{\text{destination}=S_j} passengers
+        \end{gather*}
+        Let \(dist_{ij}\) be the geographic distance between stops \(S_i\) and \(S_j\) (computed from stop coordinates), and let the distance-decay function be:
+        \begin{gather*}
+            f(dist_{ij}) = \frac{1}{1 + dist_{ij}}
+        \end{gather*}
+        Then:
+        \begin{gather*}
+            Acc_i = \sum_{j \neq i} A_j \cdot f(dist_{ij}), \\
+            Access_i = \frac{Acc_i - \min(Acc)}{\max(Acc) - \min(Acc)}
+        \end{gather*}
+    }
+    \item \(w_1,w_2,w_3:\) Weight coefficients to be adjusted.
 \end{itemize}
 
-\vspace{0.25 cm}
-
 \textbf{Note:} \texttt{TransferFrequency} is not considered in this setting because the OD-hour aggregated format does not provide enough information to reliably identify individual transfer events or sequential legs of a single passenger journey.
+
+\subsection{Django Web App Implementation}
+\label{subsec:django-web-app}
+
+The interactive environment to display results is built with the Django framework (Python 3.13), following a Model-View-Template (MVT) pattern to manage large-scale transit datasets.
+The source code is publicly available on GitHub~\cite{apothemia}.
+
+\subsection{Frontend and Interactive Visualisation}
+\label{subsec:frontend}
+
+The presentation layer is a single-page application using \textbf{Leaflet.js} to achieve an interactive map display.
+
+\begin{itemize}[noitemsep]
+    \item \textbf{Geospatial Visualisation}: Stops are rendered as interactive markers on top of their corresponding coordinates on the map.
+    \item \textbf{Dynamic Parameter Selection}: The interface features several input fields, allowing users to choose the database table holding the records, start and end dates to filter records within an interval, and a ``Weight Splitter'' component to assign coefficients for scoring metrics.
+    \item \textbf{Client-Side State Management}: Upon receiving an API response, the system updates the UI with the relevant data received.
+\end{itemize}
+
+\subsection{Backend and API Endpoints}
+\label{subsec:backend}
+
+The data is stored in a relational database schema of two primary entities: \textit{`Stations'}, containing geographic metadata (coordinates and unique identifiers) of the stops, and \textit{`YearlyUsage'}, containing hourly origin-destination (OD) passenger records.
+
+A custom management script (`load\_csv.py') handles the insertion of high-volume CSV data into relevant databases with transactional batch processing.
+
+The system uses a REST API that serves as the bridge between the database and the visualisation layer.
+The key endpoints include:
+
+\begin{itemize}
+    \item \textbf{``GET /api/stations/''}: Returns geospatial metadata of stations in JSON format for marker placement.
+    \item \textbf{``GET /api/data/''}: Accepts parameters (`model', `start\zwsp{}\_date', `end\zwsp{}\_date') to fetch the data from the given model to return records between the start and end dates.
+    \item \textbf{``GET /api/station-scores/''}: Accepts parameters (`start\zwsp{}\_date', `end\zwsp{}\_date') and user-defined weights ($w_1, w_2, w_3$) to return normalised attractiveness metric scores.
+\end{itemize}

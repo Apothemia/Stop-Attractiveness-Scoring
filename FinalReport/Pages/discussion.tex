@@ -1,0 +1,34 @@
+\section{Discussion}
+\label{sec:discussion}
+
+This section discusses the strengths and limitations of the Attractiveness Scoring (AS) framework, reflects on the challenges encountered, and mentions how alternative choices might influence the outcomes.
+
+\subsection{Strengths and Weaknesses of the Proposed Approach}
+\label{subsec:strengths-and-weaknesses-of-the-proposed-approach}
+
+One of the primary strengths of the proposed framework is its complete reliance on observed behaviours.
+By using large-scale OD ridership data, the method remains data-driven and reproducible.
+Additionally, the modular design of the scoring components provides transparency on how of each scoring metric contributes to the attractiveness score.
+
+However, one key weakness of the AS framework is that there is no direct way of knowing the true attractiveness scores.
+Instead, attractiveness is inferred through a weighted combination of multiple behavioural indicators.
+For this reason, the choice of weights may introduce an element of subjectivity that can influence stop rankings, unless a more objective method for determining them is provided.
+
+\subsection{Challenges Encountered and Mitigation Strategies}
+\label{subsec:challenges}
+
+The most significant challenge was the data availability, as most public transport systems do not make their automated fare collection or smart card transaction data publicly accessible.
+As a result, each `station' was considered as `stop' and the stop-level analysis was constrained to station-level for this study.
+
+Another challenge was handling the scale of the dataset, as year-long hourly OD records can be computationally expensive to process.
+This was addressed by limiting the analysis window for score calculation to a maximum of seven days, however, this limit is not essential to the framework and can be increased in systems with greater computational capacity.
+
+\subsection{Impact of Alternative Methods}
+\label{subsec:alternative-methods}
+
+Alternative methodological choices could lead to different interpretations of attractiveness.
+
+For example, clustering-based approaches may group stops with similar usage profiles without producing an actual ranking.
+Similarly, machine learning models could be used to predict attractiveness from external features, but it would also reduce the transparency and interpretability of those features.
+
+Compared to these alternatives, the proposed AS framework prioritises explainability at the expense of predictive performance and relational complexity.
